@@ -46,8 +46,8 @@ Shader "Unlit/RayMarch"
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.ro = _WorldSpaceCameraPos;
-                o.hitPos = v.vertex;
+                o.ro = mul(unity_WorldToObject, float4(_WorldSpaceCameraPos,1)); //world space, relative to the world
+                o.hitPos = v.vertex; //object space, relative to the object
                 return o;
             }
 
@@ -105,14 +105,18 @@ Shader "Unlit/RayMarch"
                 float3 rd = normalize(i.hitPos - ro); //(float3(uv.x, uv.y, 1));
 
                 float d = Raymarch(ro, rd);
+                float tex = tex2D(_MainTex, i.uv);
                 fixed4 col = 0;
+                float m = dot(uv,uv);
 
-                if (d < MAX_DIST)
+                if (d < MAX_DIST) discard;
                 {
                     float3 p = ro + rd * d;
                     float3 n = GetNormal(p);
                     col.rgb = n;
                 }
+
+                col = lerp(col, tex, smoothstep(.1, .2, m));
               
                 return col;
             }

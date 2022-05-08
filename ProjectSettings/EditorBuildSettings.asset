@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/FastNoise Unity/Demo Scenes/Mesh Warp.unity
+    guid: 7b118c6a7f126f44993b265e18efde6f
   m_configObjects: {}
